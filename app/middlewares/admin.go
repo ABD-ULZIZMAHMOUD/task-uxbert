@@ -16,6 +16,7 @@ func AdminMiddleware() gin.HandlerFunc {
 		user := models.GetUserBYToken(g.GetHeader("Authorization"))
 		if user.ID == 0 || user.Type != 1 {
 			helpers.ReturnForbidden(g, "Invalid API token!")
+			g.Abort()
 			return
 		}
 		userJson, _ := json.Marshal(&user)

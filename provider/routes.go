@@ -16,6 +16,8 @@ func SetRoutes() {
 	config.Router.Use(middlewares.CORSMiddleware())
 
 	routes.AuthRoutes()
+	routes.VisitorRoutes()
+	routes.AdminRoutes()
 	// run server
 	_ = config.Router.Run(os.Getenv("PORT"))
 }

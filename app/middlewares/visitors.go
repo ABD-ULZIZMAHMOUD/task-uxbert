@@ -1,27 +1,32 @@
 package middlewares
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"task-uxbert/config"
+	helpers "task-uxbert/helper"
 	"task-uxbert/models"
 )
 
-/**
-* middleware to make sure that Authorization
-* @ param   handler func
-* @ return  func
+/***
+* middleware to make sure that Authorization and user is normal
  */
-func UserMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var user models.User
-		config.Db.Table("users").Where("token = ?", c.GetHeader("Authorization")).Scan(&user)
-		if user.ID == 0 {
-			{
-				RespondWithError(c, 401, "Invalid API toke")
-				return
-			}
+func VisitorMiddleware() gin.HandlerFunc {
+	return func(g *gin.Context) {
+		if g.GetHeader("Authorization") == "" {
+			helpers.ReturnForbidden(g, "Invalid API token!")
+			return
 		}
-		c.Next()
+
+		user := models.GetUserBYToken(g.GetHeader("Authorization"))
+		if user.ID == 0 || user.Type != 2 {
+			helpers.ReturnForbidden(g, "Invalid API token!")
+			g.Abort()
+			return
+		}
+
+		userJson, _ := json.Marshal(&user)
+		g.Request.Header.Set("user", string(userJson))
+		g.Next()
 		return
 	}
 }

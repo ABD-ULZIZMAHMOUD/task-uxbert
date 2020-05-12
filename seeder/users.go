@@ -1,6 +1,7 @@
 package seeder
 
 import (
+	"github.com/google/uuid"
 	"syreclabs.com/go/faker"
 	"task-uxbert/config"
 	helpers "task-uxbert/helper"
@@ -16,6 +17,7 @@ func newUser(admin bool) {
 		Email:    faker.Internet().Email(),
 		Password: hash,
 		FullName: faker.Name().Name(),
+		Token:    uuid.New().String(),
 	}
 	// if admin true create admin user else create normal user
 	if admin {
@@ -32,9 +34,9 @@ func newUser(admin bool) {
 func UserSeeder() {
 	// seed super admin
 	SeedSuperAdmin()
-	// seed admin users
+	// seed normal users
 	for i := 0; i < 5; i++ {
-		newUser(true)
+		newUser(false)
 	}
 }
 
@@ -48,6 +50,7 @@ func SeedSuperAdmin() {
 		Email:    "admin@admin.com",
 		Password: hash,
 		Type:     1,
+		Token:    uuid.New().String(),
 	}
 	config.Db.Create(&user)
 }
