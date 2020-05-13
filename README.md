@@ -15,6 +15,12 @@
 https://documenter.getpostman.com/view/4006411/Szmh3xLS
 ```
 
+# packages 
+```
+for requests https://github.com/gin-gonic/gin
+for mysql database https://gorm.io/docs/
+for socket https://github.com/gorilla/websocket
+```
 # database structure 
 ![aImage of Yaktocat](https://i.ibb.co/Gk3L9vF/chat.png)
 
